@@ -1,0 +1,18 @@
+admin
+framework - adminlte
+
+	->login/register
+	->products
+	->categories
+	->orders
+	->reporting
+	->users
+customer
+framework->theme
+display
+	-categories
+	-products
+	-shopping
+	-checkout
+	-register
+	-login
