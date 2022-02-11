@@ -43,7 +43,7 @@ require('../config/common.php');
               $num_of_rec=2;
               $offset=($pageno-1)*$num_of_rec;
 
-              if(empty($_POST['search'])){
+              if(empty($_POST['search'])  && empty($_COOKIE['search'])){
                 $stmt=$db->prepare('SELECT * FROM categories ORDER BY id DESC');
                 $stmt->execute();
                 $rawresult=$stmt->fetchALL();
@@ -53,8 +53,11 @@ require('../config/common.php');
                 $stmt->execute();
                 $result=$stmt->fetchALL();
               }else{
-                $searchkey=$_POST['search'];
-                
+                if(empty($_POST['search'])){
+                  $searchkey=$_COOKIE['search'];
+                }else{
+                  $searchkey=$_POST['search'];
+                }
                 $stmt=$db->prepare("SELECT * FROM categories WHERE name LIKE '%$searchkey%' ORDER BY id DESC");
                 $stmt->execute();
                 $rawresult=$stmt->fetchALL();
@@ -91,7 +94,7 @@ require('../config/common.php');
                             <td><?= escape(substr($value['description'],0,50)) ?></td>
                             <td>
                               <a href="cat_edit.php?id=<?= escape($value['id']) ?>" class="btn btn-info">Edit</a>
-                              <a href="cat_delete.php?id=<?= escape($value['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                              <a href="cat_del.php?id=<?= escape($value['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                             </td>
                           </tr>
                   <?php
