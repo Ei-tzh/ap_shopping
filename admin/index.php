@@ -102,7 +102,7 @@ require('../config/common.php');
                       <td><?= escape($catresult['name'])  ?></td>
                       <td>
                       <a href="product_edit.php?id=<?= escape($val['id']) ?>" class="btn btn-outline-primary">Edit</a>
-                      <a href="product_delete.php?id=<?= escape($val['id']) ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                      <a href="product_del.php?id=<?= escape($val['id']) ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                       </td>
                     </tr>
                     <?php
