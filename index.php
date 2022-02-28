@@ -1,3 +1,13 @@
+<?php 
+session_start();
+require('config/config.php');
+require('config/common.php');
+
+if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
+	header('location:login.php');
+}
+
+?>
 <?php include('header.html') ?>
 				<!-- End Filter Bar -->
 				<!-- Start Best Seller -->

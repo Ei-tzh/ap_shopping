@@ -24,19 +24,19 @@
       if(empty($_POST['email'])){
         $emailError="Email cannot be null.";
       }
+
       if(empty($_POST['password'])){
         $passwordError="Password cannot be null";
-      }
-      if(strlen($_POST['password']) < 4){
+      }elseif(strlen($_POST['password']) < 4){
         $passwordError = 'Password should be 4 characters at least';
       } 
+
       if(empty($_POST['address'])){
         $addressError="Address cannot be null";
       }
       if(empty($_POST['phone'])){
         $telError="Phone cannot be null";
-      }
-      if(strlen($_POST['phone'])<9 || strlen($_POST['phone'])>14){
+      }elseif(strlen($_POST['phone'])<9 || strlen($_POST['phone'])>14){
         $telError="Phone number must be between 9 and 14 characters.";
       }
     }else{
