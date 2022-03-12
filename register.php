@@ -4,7 +4,8 @@ require('config/config.php');
 require('config/common.php');
 
 if($_POST){
-    if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['name'])<4 || empty($_POST['address']) || empty($_POST['phone']) || (strlen($_POST['phone'])<9 || strlen($_POST['phone'])>14 ) ){
+    if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password'])<4 || empty($_POST['address']) || empty($_POST['phone']) || (strlen($_POST['phone'])<9 || strlen($_POST['phone'])>14 ) ){
+		
         if(empty($_POST['name'])){
             $nameError="*Name  is required.";
           }
@@ -28,6 +29,7 @@ if($_POST){
           }
 
     }else{
+	
         $name=$_POST['name'];
         $email=$_POST['email'];
         $password=password_hash($_POST['password'],PASSWORD_DEFAULT);
@@ -52,7 +54,7 @@ if($_POST){
                 ':phone'=>$phone
             ]);
         if($result){
-                echo "<script>alert('Login Successful.');window.location.href='login.php';</script>";
+                echo "<script>alert('You can now login with these email and password.');window.location.href='login.php';</script>";
         }
         }
     }
@@ -149,7 +151,7 @@ if($_POST){
 				<div class="col-lg-12">
                 <div class="login_form_inner">
 						<h3>Create New Account</h3>
-						<form class="row login_form" action="register.php" method="post" id="contactForm" novalidate="novalidate">
+						<form class="row login_form" action="" method="post" id="contactForm" novalidate="novalidate">
 						<input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
 							<div class="col-md-12 form-group">
 								<input type="text" class="form-control <?php echo empty($nameError) ? '': 'is-invalid border-danger'; ?>" id="name" name="name" placeholder="UserName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'UserName'">
