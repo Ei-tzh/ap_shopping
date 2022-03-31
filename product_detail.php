@@ -1,4 +1,4 @@
-<?php include('header.html') ?>
+<?php include('header.php') ?>
 <!--================Single Product Area =================-->
 <div class="product_image_area">
   <div class="container">
