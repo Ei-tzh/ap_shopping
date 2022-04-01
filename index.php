@@ -6,10 +6,22 @@ require('config/common.php');
 if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
 	header('location:login.php');
 }
-  
+if (!empty($_POST['search'])) {
+    setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+    
+  }
+  else{
+    if (empty($_GET['pageno'])) {
+      unset($_COOKIE['search']); 
+      setcookie('search', null, -1, '/'); 
+    }
+  } 
 ?>
 <?php include('header.php') ?>
 		<?php
+		if(!empty($_GET['category_id'])){
+			exit();
+		}
             if(empty($_GET['pageno'])){
               $pageno=1;
             }else{
@@ -18,20 +30,36 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
             $numOfRec=6;
             $offset=($pageno-1)*$numOfRec;
             if(empty($_POST['search']) && empty($_COOKIE['search'])){
-              $stmt=$db->prepare("SELECT * FROM products ORDER BY id");
-              $stmt->execute();
-              $rawresult=$stmt->fetchAll();
-              $totalpages=ceil(count($rawresult)/$numOfRec);
+				if(empty($_GET['category_id'])){
+					echo"Hello";
+					$stmt=$db->prepare("SELECT * FROM products ORDER BY id");
+					$stmt->execute();
+					$rawresult=$stmt->fetchAll();
+					$totalpages=ceil(count($rawresult)/$numOfRec);
 
-              $stmtproducts=$db->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfRec");
-              $stmtproducts->execute();
-              $resultproducts=$stmtproducts->fetchAll();
+					$stmtproducts=$db->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfRec");
+					$stmtproducts->execute();
+					$resultproducts=$stmtproducts->fetchAll();
+				}else{
+					$id=$_GET['id'];
+					exit();
+					$stmt=$db->prepare("SELECT * FROM products ORDER BY id WHERE id=$id");
+					$stmt->execute();
+					$rawresult=$stmt->fetchAll();
+					$totalpages=ceil(count($rawresult)/$numOfRec);
+
+					$stmtproducts=$db->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfRec WHERE id=$id");
+					$stmtproducts->execute();
+					$resultproducts=$stmtproducts->fetchAll();
+				}
+              
             }else{
               if(!empty($_POST['search'])){
                 $search=$_POST['search'];
               }else{
                 $search=$_COOKIE['search'];
               }
+			  echo $search;
               $stmt=$db->prepare("SELECT * FROM products WHERE name LIKE '%$search%' ORDER BY id");
               $stmt->execute();
               $rawresult=$stmt->fetchAll();
@@ -57,7 +85,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
 						<ul class="main-categories">
 							<?php foreach($catresult as $val): ?>
 							<li class="main-nav-list">
-								<a data-toggle="collapse" href="#fruitsVegetable">
+								<a data-toggle="collapse" href="?category_id=<?php echo escape($val['id']); ?>">
 									<span class="lnr lnr-arrow-right"></span><?php echo escape($val['name']) ?>
 								</a>
 							</li>

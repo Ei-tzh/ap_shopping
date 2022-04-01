@@ -15,7 +15,7 @@ require('../config/common.php');
             if( password_verify($_POST['pwd'],$user['password'])){
                 $_SESSION['user_id']=$user['id'];
                 $_SESSION['username']=$user['name'];
-                $_SESSION['role']=1;
+                $_SESSION['role']=$user['role'];
                 $_SESSION['logged_in']=time();
 
                 header('Location:index.php');
