@@ -1,32 +1,34 @@
+<?php 
+session_start();
+require('config/config.php');
+require('config/common.php');
+
+if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
+	header('location:login.php');
+}
+
+$stmt=$db->prepare("SELECT * FROM products WHERE id=".$_GET['id']);
+$stmt->execute();
+$result=$stmt->fetch(PDO::FETCH_ASSOC);
+?>
 <?php include('header.php') ?>
 <!--================Single Product Area =================-->
 <div class="product_image_area">
   <div class="container">
     <div class="row s_product_inner">
       <div class="col-lg-6">
-        <div class="s_Product_carousel">
+        
           <div class="single-prd-item">
-            <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
+            <img class="img-fluid" src="admin/<?php echo escape($result['image']) ?>" alt="">
           </div>
-          <div class="single-prd-item">
-            <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
-          </div>
-          <div class="single-prd-item">
-            <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
-          </div>
-        </div>
+       
       </div>
       <div class="col-lg-5 offset-lg-1">
         <div class="s_product_text">
-          <h3>Faded SkyBlu Denim Jeans</h3>
-          <h2>$149.99</h2>
-          <ul class="list">
-            <li><a class="active" href="#"><span>Category</span> : Household</a></li>
-            <li><a href="#"><span>Availibility</span> : In Stock</a></li>
-          </ul>
-          <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
-            something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
-            during the winter.</p>
+          <h3><?php echo escape($result['name']) ?></h3>
+          <h2><?php echo escape($result['price'])." MMK"; ?></h2>
+          
+          <p><?php echo escape($result['description'])?></p>
           <div class="product_count">
             <label for="qty">Quantity:</label>
             <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
@@ -37,6 +39,7 @@
           </div>
           <div class="card_area d-flex align-items-center">
             <a class="primary-btn" href="#">Add to Cart</a>
+            <a class="btn btn-secondary" href="index.php">Back To Products</a>
           </div>
         </div>
       </div>

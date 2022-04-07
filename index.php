@@ -8,7 +8,6 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
 }
 if (!empty($_POST['search'])) {
     setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
-    
   }
   else{
     if (empty($_GET['pageno'])) {
@@ -19,9 +18,7 @@ if (!empty($_POST['search'])) {
 ?>
 <?php include('header.php') ?>
 		<?php
-		if(!empty($_GET['category_id'])){
-			exit();
-		}
+		
             if(empty($_GET['pageno'])){
               $pageno=1;
             }else{
@@ -30,8 +27,18 @@ if (!empty($_POST['search'])) {
             $numOfRec=6;
             $offset=($pageno-1)*$numOfRec;
             if(empty($_POST['search']) && empty($_COOKIE['search'])){
-				if(empty($_GET['category_id'])){
-					echo"Hello";
+				if(!empty($_GET['category_id'])){
+					$cat_id=$_GET['category_id'];
+					$stmt=$db->prepare("SELECT * FROM products WHERE category_id=$cat_id ORDER BY id");
+					$stmt->execute();
+					$rawresult=$stmt->fetchAll();
+					$totalpages=ceil(count($rawresult)/$numOfRec);
+
+					$stmtproducts=$db->prepare("SELECT * FROM products WHERE category_id=$cat_id ORDER BY id DESC LIMIT $offset,$numOfRec");
+					$stmtproducts->execute();
+					$resultproducts=$stmtproducts->fetchAll();
+				}else{
+					
 					$stmt=$db->prepare("SELECT * FROM products ORDER BY id");
 					$stmt->execute();
 					$rawresult=$stmt->fetchAll();
@@ -40,26 +47,14 @@ if (!empty($_POST['search'])) {
 					$stmtproducts=$db->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfRec");
 					$stmtproducts->execute();
 					$resultproducts=$stmtproducts->fetchAll();
-				}else{
-					$id=$_GET['id'];
-					exit();
-					$stmt=$db->prepare("SELECT * FROM products ORDER BY id WHERE id=$id");
-					$stmt->execute();
-					$rawresult=$stmt->fetchAll();
-					$totalpages=ceil(count($rawresult)/$numOfRec);
-
-					$stmtproducts=$db->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfRec WHERE id=$id");
-					$stmtproducts->execute();
-					$resultproducts=$stmtproducts->fetchAll();
 				}
-              
             }else{
               if(!empty($_POST['search'])){
                 $search=$_POST['search'];
               }else{
                 $search=$_COOKIE['search'];
               }
-			  echo $search;
+			//   echo $search;
               $stmt=$db->prepare("SELECT * FROM products WHERE name LIKE '%$search%' ORDER BY id");
               $stmt->execute();
               $rawresult=$stmt->fetchAll();
@@ -85,7 +80,7 @@ if (!empty($_POST['search'])) {
 						<ul class="main-categories">
 							<?php foreach($catresult as $val): ?>
 							<li class="main-nav-list">
-								<a data-toggle="collapse" href="?category_id=<?php echo escape($val['id']); ?>">
+								<a href="index.php?category_id=<?php echo escape($val['id']); ?>">
 									<span class="lnr lnr-arrow-right"></span><?php echo escape($val['name']) ?>
 								</a>
 							</li>
@@ -121,7 +116,9 @@ if (!empty($_POST['search'])) {
 						<?php foreach($resultproducts as $value): ?>
 						<div class="col-lg-4 col-md-6">
 							<div class="single-product">
-								<img class="img-fluid" src="admin/<?php echo escape($value['image']) ?>" alt="" style="height:250px;object-fit: cover;">
+								<a href="product_detail.php?id=<?php echo $value['id']; ?>">
+									<img class="img-fluid" src="admin/<?php echo escape($value['image']) ?>" alt="" style="height:250px;object-fit: cover;">
+								</a>
 								<div class="product-details">
 									<h6><?php echo escape($value['name']) ?></h6>
 									<div class="price">
@@ -133,7 +130,7 @@ if (!empty($_POST['search'])) {
 											<span class="ti-bag"></span>
 											<p class="hover-text">add to bag</p>
 										</a>
-										<a href="" class="social-info">
+										<a href="product_detail.php?id=<?php echo $value['id']; ?>" class="social-info">
 											<span class="lnr lnr-move"></span>
 											<p class="hover-text">view more</p>
 										</a>

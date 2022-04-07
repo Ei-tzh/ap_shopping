@@ -6,7 +6,7 @@ require('../config/common.php');
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
   }
-  echo $_SESSION['role'];
+  // echo $_SESSION['role'];
   if($_SESSION['role']!=1){
     header('Location:login.php');
   }
