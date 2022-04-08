@@ -61,7 +61,7 @@
 								 }
 							 }
 							?>
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span><span class="badge bg-danger text-white" style="line-height: initial;"><?php echo $cart; ?></span></a></li>
+							<li class="nav-item"><a href="cart.php" class="cart"><span class="ti-bag"></span><span class="badge bg-danger text-white" style="line-height: initial;"><?php echo $cart; ?></span></a></li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
