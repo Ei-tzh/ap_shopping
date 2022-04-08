@@ -53,7 +53,15 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+							<?php
+							 $cart=0;
+							 if(isset($_SESSION['cart'])){
+								 foreach($_SESSION['cart'] as $key=>$qty){
+									 $cart +=$qty;
+								 }
+							 }
+							?>
+							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span><span class="badge bg-danger text-white" style="line-height: initial;"><?php echo $cart; ?></span></a></li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
@@ -85,7 +93,7 @@
 	<!-- End Header Area -->
 
 	<!-- Start Banner Area -->
-	<section class="banner-area organic-breadcrumb">
+	<section class="banner-area organic-breadcrumb" style="margin-bottom:0px;!important">
 		<div class="container">
 			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first">
