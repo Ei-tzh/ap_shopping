@@ -24,7 +24,7 @@ if($_POST){
         }else{
             $_SESSION['cart']['id:'.$id] =$qty;
         }
-       header('Location:product_detail.php?id='.$id);
+       header('Location:cart.php');
     }
    
 }

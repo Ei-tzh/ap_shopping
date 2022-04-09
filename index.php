@@ -29,22 +29,22 @@ if (!empty($_POST['search'])) {
             if(empty($_POST['search']) && empty($_COOKIE['search'])){
 				if(!empty($_GET['category_id'])){
 					$cat_id=$_GET['category_id'];
-					$stmt=$db->prepare("SELECT * FROM products WHERE category_id=$cat_id ORDER BY id");
+					$stmt=$db->prepare("SELECT * FROM products WHERE category_id=$cat_id AND quantity>0 ORDER BY id");
 					$stmt->execute();
 					$rawresult=$stmt->fetchAll();
 					$totalpages=ceil(count($rawresult)/$numOfRec);
 
-					$stmtproducts=$db->prepare("SELECT * FROM products WHERE category_id=$cat_id ORDER BY id DESC LIMIT $offset,$numOfRec");
+					$stmtproducts=$db->prepare("SELECT * FROM products WHERE category_id=$cat_id AND quantity>0 ORDER BY id DESC LIMIT $offset,$numOfRec");
 					$stmtproducts->execute();
 					$resultproducts=$stmtproducts->fetchAll();
 				}else{
 					
-					$stmt=$db->prepare("SELECT * FROM products ORDER BY id");
+					$stmt=$db->prepare("SELECT * FROM products WHERE quantity>0 ORDER BY id");
 					$stmt->execute();
 					$rawresult=$stmt->fetchAll();
 					$totalpages=ceil(count($rawresult)/$numOfRec);
 
-					$stmtproducts=$db->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfRec");
+					$stmtproducts=$db->prepare("SELECT * FROM products WHERE quantity>0 ORDER BY id DESC LIMIT $offset,$numOfRec");
 					$stmtproducts->execute();
 					$resultproducts=$stmtproducts->fetchAll();
 				}
@@ -55,12 +55,12 @@ if (!empty($_POST['search'])) {
                 $search=$_COOKIE['search'];
               }
 			//   echo $search;
-              $stmt=$db->prepare("SELECT * FROM products WHERE name LIKE '%$search%' ORDER BY id");
+              $stmt=$db->prepare("SELECT * FROM products WHERE name LIKE '%$search%' AND quantity>0 ORDER BY id");
               $stmt->execute();
               $rawresult=$stmt->fetchAll();
               $totalpages=ceil(count($rawresult)/$numOfRec);
 
-              $stmtproducts=$db->prepare("SELECT * FROM products WHERE name LIKE '%$search%' ORDER BY id DESC LIMIT $offset,$numOfRec");
+              $stmtproducts=$db->prepare("SELECT * FROM products WHERE name LIKE '%$search%' AND quantity>0 ORDER BY id DESC LIMIT $offset,$numOfRec");
               $stmtproducts->execute();
               $resultproducts=$stmtproducts->fetchAll();
 
@@ -125,15 +125,22 @@ if (!empty($_POST['search'])) {
 										<h6><?php echo escape($value['price']) ?></h6>
 									</div>
 									<div class="prd-bottom">
-
-										<a href="" class="social-info">
-											<span class="ti-bag"></span>
-											<p class="hover-text">add to bag</p>
-										</a>
-										<a href="product_detail.php?id=<?php echo $value['id']; ?>" class="social-info">
-											<span class="lnr lnr-move"></span>
-											<p class="hover-text">view more</p>
-										</a>
+										<form action="addToCart.php" method="post">
+											<input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
+											<input type="hidden" name="id" value="<?php echo escape($value['id']) ?>">
+											<input type="hidden" name="qty" value="1">
+											<div class="social-info">
+												<button type="submit" style="display:contents;"class="social-info">
+													<span class="ti-bag"></span>
+													<p class="hover-text" style="left: 20px;">add to bag</p>
+												</button>
+											</div>
+											<a href="product_detail.php?id=<?php echo $value['id']; ?>" class="social-info">
+												<span class="lnr lnr-move"></span>
+												<p class="hover-text">view more</p>
+											</a>
+										</form>
+										
 									</div>
 								</div>
 							</div>
