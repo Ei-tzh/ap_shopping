@@ -10,7 +10,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['username'])){
 $stmt=$db->prepare("SELECT * FROM products WHERE id=".$_GET['id']);
 $stmt->execute();
 $result=$stmt->fetch(PDO::FETCH_ASSOC);
-print_r($_SESSION['cart']);
+// print_r($_SESSION['cart']);
 ?>
 <?php include('header.php') ?>
 <!--================Single Product Area =================-->

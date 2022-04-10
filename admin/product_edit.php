@@ -32,6 +32,13 @@ require('../config/common.php');
                 $catError="Category field is required!";
             }
       }else{//validation success
+        if(is_numeric($_POST['price'])!= 1){
+            $priceError="Price must be only integer.";
+        }
+        if(is_numeric($_POST['quantity'])!= 1){
+            $qtyError="Quantity must be only integer.";
+        }
+        if(empty($priceError) && empty($qtyError)){
             $id=$_POST['id'];
             $name=$_POST['name'];
             $des=$_POST['description'];
@@ -75,7 +82,9 @@ require('../config/common.php');
                         }
                     }
                 }
-      }
+            }
+            
+        }
   }
 $stmt=$db->prepare("SELECT * FROM products WHERE id=".$_GET['id']);
 $stmt->execute();
@@ -111,14 +120,14 @@ $productResult=$stmt->fetch();
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price:</label>
-                    <input type="number" name="price" id="price" class="form-control  <?php echo empty($priceError) ? '': 'is-invalid'; ?>" value="<?php echo escape($productResult['price']) ?>">
+                    <input type="text" name="price" id="price" class="form-control  <?php echo empty($priceError) ? '': 'is-invalid'; ?>" value="<?php echo escape($productResult['price']) ?>">
                     <div class="invalid-feedback">
                         <?php echo empty($priceError) ? '': $priceError; ?>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity:</label>
-                    <input type="number" name="quantity" id="quantity" class="form-control  <?php echo empty($qtyError) ? '': 'is-invalid'; ?>" value="<?php echo escape($productResult['quantity']) ?>">
+                    <input type="text" name="quantity" id="quantity" class="form-control  <?php echo empty($qtyError) ? '': 'is-invalid'; ?>" value="<?php echo escape($productResult['quantity']) ?>">
                     <div class="invalid-feedback">
                         <?php echo empty($qtyError) ? '': $qtyError; ?>
                     </div>

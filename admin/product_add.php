@@ -35,35 +35,44 @@ require('../config/common.php');
                 $imageError="Image field is required!";
             }
       }else{//validation success
-          $file='images/'.$_FILES['image']['name'];
-          $imagetype=pathinfo($file,PATHINFO_EXTENSION);
-          $tmp=$_FILES['image']['tmp_name'];//a place stored request data(image)
-          if($imagetype != 'png' && $imagetype != 'jpg' && $imagetype !='jpeg'){
-            $imageError="Image must be png,jpg and jpeg.";
-          }else{//image validation success
-            $name=$_POST['name'];
-            $des=$_POST['description'];
-            $price=$_POST['price'];
-            $qty=$_POST['quantity'];
-            $category=$_POST['category'];
-            $image=$file;
-
-            move_uploaded_file($tmp,$file);
-            
-            $stmt=$db->prepare("INSERT INTO products(name,description,price,quantity,category_id,image) VALUES (:name,:description,:price,:quantity,:category,:image)");
-            $result=$stmt->execute([
-                ':name'=>$name,
-                ':description'=>$des,
-                ':price'=>$price,
-                ':quantity'=>$qty,
-                ':category'=>$category,
-                ':image'=>$file
-            ]);
-            if($result){
-                echo "<script>alert('New product is successfully added!');window.location.href='index.php';</script>";
+            if(is_numeric($_POST['price'])!= 1){
+                $priceError="Price must be only integer.";
             }
-          }
-      }
+            if(is_numeric($_POST['quantity'])!= 1){
+                $qtyError="Quantity must be only integer.";
+            }
+            if(empty($priceError) && empty($qtyError)){
+                $file='images/'.$_FILES['image']['name'];
+                $imagetype=pathinfo($file,PATHINFO_EXTENSION);
+                $tmp=$_FILES['image']['tmp_name'];//a place stored request data(image)
+                if($imagetype != 'png' && $imagetype != 'jpg' && $imagetype !='jpeg'){
+                    $imageError="Image must be png,jpg and jpeg.";
+                }else{//image validation success
+                    $name=$_POST['name'];
+                    $des=$_POST['description'];
+                    $price=$_POST['price'];
+                    $qty=$_POST['quantity'];
+                    $category=$_POST['category'];
+                    $image=$file;
+    
+                    move_uploaded_file($tmp,$file);
+                    
+                    $stmt=$db->prepare("INSERT INTO products(name,description,price,quantity,category_id,image) VALUES (:name,:description,:price,:quantity,:category,:image)");
+                    $result=$stmt->execute([
+                        ':name'=>$name,
+                        ':description'=>$des,
+                        ':price'=>$price,
+                        ':quantity'=>$qty,
+                        ':category'=>$category,
+                        ':image'=>$file
+                    ]);
+                    if($result){
+                        echo "<script>alert('New product is successfully added!');window.location.href='index.php';</script>";
+                    }
+                }
+            }
+           
+        }
   }
 ?>
 
@@ -79,7 +88,7 @@ require('../config/common.php');
             <form action="product_add.php" method="post" enctype="multipart/form-data">
             <input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Category Name:</label>
+                    <label for="name" class="form-label">Product Name:</label>
                     <input type="text" name="name" id="name" class="form-control  <?php echo empty($catNameError) ? '': 'is-invalid'; ?>" >
                     <div class="invalid-feedback">
                         <?php echo empty($catNameError) ? '': $catNameError; ?>
@@ -94,14 +103,14 @@ require('../config/common.php');
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price:</label>
-                    <input type="number" name="price" id="price" class="form-control  <?php echo empty($priceError) ? '': 'is-invalid'; ?>" >
+                    <input type="text" name="price" id="price" class="form-control  <?php echo empty($priceError) ? '': 'is-invalid'; ?>" >
                     <div class="invalid-feedback">
                         <?php echo empty($priceError) ? '': $priceError; ?>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity:</label>
-                    <input type="number" name="quantity" id="quantity" class="form-control  <?php echo empty($qtyError) ? '': 'is-invalid'; ?>" >
+                    <input type="text" name="quantity" id="quantity" class="form-control  <?php echo empty($qtyError) ? '': 'is-invalid'; ?>" >
                     <div class="invalid-feedback">
                         <?php echo empty($qtyError) ? '': $qtyError; ?>
                     </div>

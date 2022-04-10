@@ -15,6 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Font Awesome Icons -->
   <!-- <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css"> -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <script src="https://kit.fontawesome.com/dd2800783e.js" crossorigin="anonymous"></script>
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
@@ -41,7 +42,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $page=end($arraylink);
     ?>
     <!-- SEARCH FORM -->
-    <?php if($page!='order_lists.php' && $page!='order_detail.php'): ?>
+    <?php if($page=='index.php' || $page=='category_lists.php' || $page=='user_lists.php'): ?>
       <form class="form-inline ml-3" method="post" action="<?php if($page=='index.php'){ echo 'index.php';}elseif($page=='category_lists.php'){  echo 'category_lists.php'; }else{ echo 'user_lists.php'; } ?>">
         <input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
         <div class="input-group input-group-sm">
@@ -115,8 +116,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview menu">
-            <a href="weeklyReport.php" class="nav-link active">
+          <li class="nav-item has-treeview menu 
+          <?php if($page=='weeklyReport.php' || $page=='monthlyReport.php' || $page=='royalUser.php' || $page=='bestItems.php'){ echo 'menu-open';}  ?>">
+            <a href="weeklyReport.php" class="nav-link ">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                Reports
@@ -125,25 +127,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="weeklyReport.php" class="nav-link">
+                <a href="weeklyReport.php" class="nav-link <?php echo $page=="weeklyReport.php"?'active':'' ?>">
+                
                   <i class="far fa-circle nav-icon"></i>
                   <p>Weekly Report</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="monthlyReport.php" class="nav-link">
+                <a href="monthlyReport.php" class="nav-link <?php echo $page=="monthlyReport.php"?'active':'' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Monthly Report</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="royalUser.php" class="nav-link">
+                <a href="royalUser.php" class="nav-link <?php echo $page=="royalUser.php"?'active':'' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Royal User</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="bestItems.php" class="nav-link">
+                <a href="bestItems.php" class="nav-link <?php echo $page=="bestItems.php"?'active':'' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Best Seller Items</p>
                 </a>

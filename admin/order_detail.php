@@ -97,11 +97,11 @@ require('../config/common.php');
               </table>
               <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end mt-3">
-                  <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
-                  <li class="page-item <?php if($pageno<=1){ echo 'disabled';}?>"><a class="page-link" href="<?php if($pageno<=1){echo '#';} else{ echo "?pageno=".($pageno-1);} ?>">Previous</a></li>
+                  <li class="page-item"><a class="page-link" href="?id=<?php echo $_GET['id'].'&pageno=1'?>">First</a></li>
+                  <li class="page-item <?php if($pageno<=1){ echo 'disabled';}?>"><a class="page-link" href="<?php if($pageno<=1){echo '#';} else{ echo "?id=".$_GET['id']."&pageno=".($pageno-1);} ?>">Previous</a></li>
                   <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
-                  <li class="page-item <?php if($pageno>=$totalpage){ echo 'disabled';}?>"><a class="page-link" href="<?php if($pageno>=$totalpage){echo '#';} else{ echo "?pageno=".($pageno+1);} ?>">Next</a></li>
-                  <li class="page-item"><a class="page-link" href="?pageno=<?php echo $totalpage; ?>">Last</a></li>
+                  <li class="page-item <?php if($pageno>=$totalpage){ echo 'disabled';}?>"><a class="page-link" href="<?php if($pageno>=$totalpage){echo '#';} else{ echo "?id=".$_GET['id']."&pageno=".($pageno+1);} ?>">Next</a></li>
+                  <li class="page-item"><a class="page-link" href="?id=<?php echo $_GET['id']?>&pageno=<?php echo $totalpage; ?>">Last</a></li>
                 </ul>
               </nav> 
             </div>
